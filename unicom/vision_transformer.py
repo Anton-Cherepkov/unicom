@@ -98,9 +98,10 @@ class Attention(nn.Module):
 
 
 class Block(nn.Module):
-    def __init__(self, dim: int, num_heads: int, mlp_ratio: int = 4, drop_path: float = 0.0, patch_n: int = 32, using_checkpoint=False):
+    def __init__(self, dim: int, num_heads: int, mlp_ratio: int = 4, drop_path: float = 0.0, patch_n: int = 32, using_checkpoint=False, use_reentrant=False):
         super().__init__()
         self.using_checkpoint = using_checkpoint
+        self.use_reentrant = use_reentrant
         self.norm1 = nn.LayerNorm(dim)
         self.norm2 = nn.LayerNorm(dim)
         self.attn = Attention(dim, num_heads)
@@ -119,7 +120,7 @@ class Block(nn.Module):
 
     def forward(self, x):
         if self.using_checkpoint:
-            return checkpoint(self.forward_impl, x)
+            return checkpoint(self.forward_impl, x use_reentrant=self.use_reentrant)
         else:
             return self.forward_impl(x)
 
