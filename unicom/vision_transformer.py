@@ -120,7 +120,7 @@ class Block(nn.Module):
 
     def forward(self, x):
         if self.using_checkpoint:
-            return checkpoint(self.forward_impl, x use_reentrant=self.use_reentrant)
+            return checkpoint(self.forward_impl, x, use_reentrant=self.use_reentrant)
         else:
             return self.forward_impl(x)
 
