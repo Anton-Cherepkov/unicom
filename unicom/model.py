@@ -4,7 +4,7 @@ import urllib
 import warnings
 
 import torch
-from typing import List
+from typing import Any, List
 from tqdm import tqdm
 from .registry import load_model_and_transform
 
@@ -79,7 +79,7 @@ def _download(url: str, root: str):
 
 
 # copy from https://github.com/openai/CLIP/blob/main/clip/clip.py#L94
-def load(name: str, device: str = "cpu", download_root: str = None):
+def load(name: str, device: str = "cpu", download_root: str = None, **model_kwargs: Any):
     if name in _MODELS:
         model_path = _download(
             _MODELS[name], download_root or os.path.expanduser("~/.cache/unicom"))
@@ -91,7 +91,7 @@ def load(name: str, device: str = "cpu", download_root: str = None):
     with open(model_path, 'rb') as opened_file:
         state_dict = torch.load(opened_file, map_location="cpu")
 
-    model, transform = load_model_and_transform(name)
+    model, transform = load_model_and_transform(name, **model_kwargs)
     state_dict_fp32 = {}
     for k, v in state_dict.items():
         state_dict_fp32[k] = v.float()
