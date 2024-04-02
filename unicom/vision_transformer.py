@@ -142,26 +142,6 @@ class PatchEmbedding(nn.Module):
         return x
 
 
-def build_model(name="ViT-L/14@336px"):
-    if name == "ViT-B/32":
-        model = VisionTransformer(
-            input_size=224, patch_size=32, in_channels=3, dim=768, embedding_size=512,
-            depth=12, num_heads=12, drop_path_rate=0.1, using_checkpoint=True)
-    elif name == "ViT-B/16":
-        model = VisionTransformer(
-            input_size=224, patch_size=16, in_channels=3, dim=768, embedding_size=768,
-            depth=12, num_heads=12, drop_path_rate=0.1, using_checkpoint=True)
-    elif name == "ViT-L/14":
-        model = VisionTransformer(
-            input_size=224, patch_size=14, in_channels=3, dim=1024, embedding_size=768,
-            depth=24, num_heads=16, drop_path_rate=0.1, using_checkpoint=True)
-    elif name == "ViT-L/14@336px":
-        model = VisionTransformer(
-            input_size=336, patch_size=14, in_channels=3, dim=1024, embedding_size=768,
-            depth=24, num_heads=16, drop_path_rate=0.1, using_checkpoint=True)
-    return model
-
-
 def _convert_image_to_rgb(image):
     return image.convert("RGB")
 
@@ -175,16 +155,3 @@ def _transform(n_px):
         Normalize((0.48145466, 0.4578275, 0.40821073),
                   (0.26862954, 0.26130258, 0.27577711)),
     ])
-
-
-def load_model_and_transform(name="ViT-L/14@336px"):
-    if name == "ViT-B/32":
-        return build_model(name), _transform(224)
-    elif name == "ViT-B/16":
-        return build_model(name), _transform(224)
-    elif name == "ViT-L/14":
-        return build_model(name), _transform(224)
-    elif name == "ViT-L/14@336px":
-        return build_model(name), _transform(336)
-    else:
-        raise
