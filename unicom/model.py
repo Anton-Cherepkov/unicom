@@ -6,7 +6,7 @@ import warnings
 import torch
 from typing import List
 from tqdm import tqdm
-from .vision_transformer import load_model_and_transform
+from .registry import load_model_and_transform
 
 __all__ = ["load", "available_models"]
 
